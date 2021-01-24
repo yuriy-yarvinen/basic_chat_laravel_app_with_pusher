@@ -29,12 +29,30 @@ export default {
 		}
 	},
 	methods:{
-		send(){
+		async send() {
+      // this.loading = true;
 			if(this.message.length != 0){
 				this.chat.messages.push(this.message);
 				this.message = '';
 			}
-		}
+      let request = {
+        message: this.message,
+
+      };
+
+      try {
+        const response = await axios.post(
+          "/api/sendChat",
+          request
+        );
+      } catch (error) {
+        this.error = error.response.data.message;
+
+      }
+
+      this.loading = false;
+
+    },
 	}
 }
 </script>

@@ -33,9 +33,7 @@ export default {
       // this.loading = true;
 			if(this.message.length != 0){
 				this.chat.messages.push(this.message);
-				this.message = '';
-			}
-      let request = {
+				      let request = {
         message: this.message,
 
       };
@@ -50,7 +48,10 @@ export default {
 
       }
 
-      this.loading = false;
+      // this.loading = false;
+				this.message = '';
+			}
+
 
     },
 	}

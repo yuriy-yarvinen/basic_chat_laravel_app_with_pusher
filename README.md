@@ -7,3 +7,6 @@ php artisan make:controller Api/ChatController
 composer require laravel/ui:^2.4
 php artisan ui vue --auth
 npm install --save laravel-echo pusher-js
+
+config pusher https://laravel.com/docs/7.x/broadcasting
+

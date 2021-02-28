@@ -2,29 +2,51 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\User;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Hash;
 
 class ResetPasswordController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Password Reset Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller is responsible for handling password reset requests
-    | and uses a simple trait to include this behavior. You're free to
-    | explore this trait and override any methods you wish to tweak.
-    |
-    */
+    public function __construct()
+    {
+        $this->middleware('guest');
+    }
 
-    use ResetsPasswords;
+    protected function validator(array $data)
+    {
 
-    /**
-     * Where to redirect users after resetting their password.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
+
+        return Validator::make($data, [
+            'name' => ['required', 'string', 'max:20'],
+            'email' => ['required', 'string', 'email', 'max:100'],
+            'password' => ['required', 'string', 'min:8'],
+
+        ]);
+    }
+
+    protected function update(array $data)
+    {
+        $user = User::where('name', $data['name'])
+            ->where('email', $data['email'])->first();
+        if ($user) {
+            $user->password = Hash::make($data['password']);
+            $user->save();
+
+
+            return true;
+        } else {
+            throw ValidationException::withMessages(['login' => 'Неверно указан email или login.']);
+        }
+    }
+
+    public function reset(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        return $this->update($request->all());
+    }
 }

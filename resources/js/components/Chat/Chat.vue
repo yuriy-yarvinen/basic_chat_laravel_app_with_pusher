@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<header-vue></header-vue>
 		    <div class="container">
         <div class="row" id="app">
 					<div class="offset-4 col-4">
@@ -16,9 +17,11 @@
 
 <script>
 import message from "./Message";
+import Header from "../Header";
 export default {
 	components:{
-		message
+		message,
+		'header-vue':Header
 	},
 	data(){
 		return {

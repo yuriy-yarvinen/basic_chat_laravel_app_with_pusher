@@ -2,30 +2,41 @@
 
 namespace App\Providers;
 
-use App\Providers\Chat;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use App\User;
+use Illuminate\Broadcasting\Channel;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 
-class ChatEvent
+class ChatEvent implements ShouldBroadcast
 {
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
+    use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    public $message;
+    public $user;
+
+    public function __construct($message, $user)
     {
-        //
+        $this->message = $message;
+        $this->user = $user;
+        $this->dontBroadcastToCurrentUser();
     }
 
     /**
-     * Handle the event.
+     * Get the channels the event should broadcast on.
      *
-     * @param  Chat  $event
-     * @return void
+     * @return \Illuminate\Broadcasting\Channel|array
      */
-    public function handle(Chat $event)
+    public function broadcastOn()
     {
-        //
+        return new PrivateChannel("chat");
+    }
+    
+    public function broadcastAs()
+    {
+        return 'ChatEvent';
     }
 }

@@ -22,6 +22,7 @@ export default {
   },
   beforeCreate() {
     this.$store.dispatch("loadUser").then(() => {
+    this.$store.dispatch("setUser",this.$route.params.user_id);
       this.loading = false;
     });
   },

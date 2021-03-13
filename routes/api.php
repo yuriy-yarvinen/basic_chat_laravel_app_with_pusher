@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,8 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth')->get('/user/{user_id}', function ($user_id) {
+    return User::where('id', $user_id)->get();
 });
 
+Route::middleware('auth')->get('getChat', 'Api\ChatController@getChat');
 Route::middleware('auth')->post('sendChat', 'Api\ChatController@send');

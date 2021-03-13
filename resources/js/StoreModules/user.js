@@ -14,7 +14,7 @@ export const user = {
 		async loadUser({ commit, dispatch }) {
 			if (!isLoggedIn()) {
 				try {
-					const user = (await axios.get("/checker")).data;
+					const user = (await axios.get("/checker")).data;					
 					setClientData(user.data);
 				} catch (error) {
 					dispatch("logout");
